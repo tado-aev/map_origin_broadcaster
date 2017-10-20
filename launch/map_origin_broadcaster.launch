@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gps_origin_frame" default="gps_origin" />
+  <arg name="map_frame" default="map" />
+  <arg name="plane" default="10" />
+  <arg name="save_on_exit" default="true" />
+
+  <node pkg="map_origin_broadcaster" type="map_origin_broadcaster_node" name="map_origin_broadcaster" output="screen" >
+    <param name="gps_origin_frame" value="$(arg gps_origin_frame)" />
+    <param name="map_frame" value="$(arg map_frame)" />
+    <param name="plane" value="$(arg plane)" />
+    <param name="save_on_exit" value="$(arg save_on_exit)" />
+
+    <remap from="fix" to="/javad/fix" />
+    <remap from="heading" to="/ssv102/heading" />
+  </node>
+</launch>
