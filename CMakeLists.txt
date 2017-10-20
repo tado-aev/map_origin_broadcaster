@@ -14,37 +14,33 @@ endif()
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  sensor_msgs
-  geometry_msgs
   tf2
   tf2_ros
-  gnss
+  tf2_geometry_msgs
+  geometry_msgs
 )
 
+find_package(Boost REQUIRED date_time)
+
 catkin_package(
- INCLUDE_DIRS include
- LIBRARIES map_origin_broadcaster
- CATKIN_DEPENDS roscpp sensor_msgs geometry_msgs tf2 tf2_ros gnss
+ CATKIN_DEPENDS roscpp tf2 tf2_ros tf2_geometry_msgs geometry_msgs
 )
 
 include_directories(
-  include
+  ${Boost_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(map_origin_broadcaster
-  src/map_origin_broadcaster.cpp
-  include/map_origin_broadcaster/map_origin_broadcaster.h
+add_executable(map_origin_broadcaster_node
+  src/map_origin_broadcaster_node.cpp
 )
 
-add_executable(map_origin_broadcaster_node src/map_origin_broadcaster_node.cpp)
-
 target_link_libraries(map_origin_broadcaster_node
-  map_origin_broadcaster
+  ${Boost_LIBRARIES}
   ${catkin_LIBRARIES}
 )
 
-install(TARGETS map_origin_broadcaster map_origin_broadcaster_node
+install(TARGETS map_origin_broadcaster_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
