@@ -49,24 +49,12 @@ main(int argc, char* argv[]) {
     std::string base_frame;
     bool save_on_exit;
 
-    if (!nh_p.getParam("gps_origin_frame", gps_origin_frame)) {
-        gps_origin_frame = "gps_origin";
-    }
-    if (!nh_p.getParam("gps_base_frame", gps_base_frame)) {
-        gps_base_frame = "gps_base_link";
-    }
-    if (!nh_p.getParam("map_frame", map_frame)) {
-        map_frame = "map";
-    }
-    if (!nh_p.getParam("odom_frame", odom_frame)) {
-        odom_frame = "odom";
-    }
-    if (!nh_p.getParam("base_frame", base_frame)) {
-        base_frame = "base_link";
-    }
-    if (!nh_p.getParam("save_on_exit", save_on_exit)) {
-        save_on_exit = true;
-    }
+    nh_p.param("gps_origin_frame", gps_origin_frame, "gps_origin");
+    nh_p.param("gps_base_frame", gps_base_frame, "gps_base_link");
+    nh_p.param("map_frame", map_frame, "map");
+    nh_p.param("odom_frame", odom_frame, "odom");
+    nh_p.param("base_frame", base_frame, "base_link");
+    nh_p.param("save_on_exit", save_on_exit, true);
 
     tf2_ros::Buffer buffer;
     tf2_ros::TransformListener tf_l{buffer};
