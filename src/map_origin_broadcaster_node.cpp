@@ -27,10 +27,10 @@ get_transform(tf2_ros::Buffer& buffer,
                                             gps_antenna_frame,
                                             ros::Time{0},
                                             ros::Duration{5});
-    // "Subtract" base_frame from gps_antenna_frame
     tf2::Transform gps_tf, odom_tf;
     tf2::convert(transform.transform, gps_tf);
     tf2::convert(odom.transform, odom_tf);
+    // "Subtract" odom_frame (i.e. however much travelled in odom)
     transform.transform = tf2::toMsg(gps_tf * odom_tf.inverse());
     transform.child_frame_id = map_frame;
     return transform;
@@ -72,7 +72,7 @@ main(int argc, char* argv[]) {
     tf2_ros::TransformListener tf_l{buffer};
     tf2_ros::StaticTransformBroadcaster tf_sb;
 
-    // Make sure that the map frame actually exists
+    // Make sure that the odom frame actually exists
     while (ros::ok()) {
         bool odom_ready = buffer.canTransform(odom_frame,
                                               base_frame,
