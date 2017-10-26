@@ -14,7 +14,7 @@
 geometry_msgs::TransformStamped
 get_transform(tf2_ros::Buffer& buffer,
               const std::string& gps_origin_frame,
-              const std::string& gps_antenna_frame,
+              const std::string& gps_base_frame,
               const std::string& map_frame,
               const std::string& odom_frame,
               const std::string& base_frame) {
@@ -24,7 +24,7 @@ get_transform(tf2_ros::Buffer& buffer,
                                        ros::Time{0},
                                        ros::Duration{5});
     auto transform = buffer.lookupTransform(gps_origin_frame,
-                                            gps_antenna_frame,
+                                            gps_base_frame,
                                             ros::Time{0},
                                             ros::Duration{5});
     tf2::Transform gps_tf, odom_tf;
@@ -43,7 +43,7 @@ main(int argc, char* argv[]) {
     ros::NodeHandle nh_p{"~"};
 
     std::string gps_origin_frame;
-    std::string gps_antenna_frame;
+    std::string gps_base_frame;
     std::string map_frame;
     std::string odom_frame;
     std::string base_frame;
@@ -52,8 +52,8 @@ main(int argc, char* argv[]) {
     if (!nh_p.getParam("gps_origin_frame", gps_origin_frame)) {
         gps_origin_frame = "gps_origin";
     }
-    if (!nh_p.getParam("gps_antenna_frame", gps_antenna_frame)) {
-        gps_antenna_frame = "gps_antenna";
+    if (!nh_p.getParam("gps_base_frame", gps_base_frame)) {
+        gps_base_frame = "gps_base_link";
     }
     if (!nh_p.getParam("map_frame", map_frame)) {
         map_frame = "map";
@@ -88,14 +88,14 @@ main(int argc, char* argv[]) {
     while (ros::ok()) {
         // Transformation between GPS origin and GPS antenna
         bool gnss_ready = buffer.canTransform(gps_origin_frame,
-                                              gps_antenna_frame,
+                                              gps_base_frame,
                                               ros::Time{0},
                                               ros::Duration{5});
         if (gnss_ready) {
             ROS_INFO_STREAM("Okay, got GNSS location of " << map_frame);
             auto transform = get_transform(buffer,
                                            gps_origin_frame,
-                                           gps_antenna_frame,
+                                           gps_base_frame,
                                            map_frame,
                                            odom_frame,
                                            base_frame);
