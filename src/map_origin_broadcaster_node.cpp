@@ -89,10 +89,24 @@ main(int argc, char* argv[]) {
                                            base_frame);
             tf_sb.sendTransform(transform);
             if (save_on_exit) {
+                // In the form: 2017-10-27T10:31:05
+                std::string datetime =
+                    boost::posix_time::to_iso_extended_string(transform.header.stamp.toBoost());
                 std::ofstream ofs;
-                ofs.open("map_origin.txt");
-                ofs << boost::posix_time::to_iso_extended_string(
-                       transform.header.stamp.toBoost()) << ","
+                ofs.open(datetime + ".csv");
+                // Write header
+                ofs << "stamp" << ","
+                    << "gps_origin_frame" << ","
+                    << "map_frame" << ","
+                    << "translation.x" << ","
+                    << "translation.y" << ","
+                    << "translation.z" << ","
+                    << "rotation.x" << ","
+                    << "rotation.y" << ","
+                    << "rotation.z" << ","
+                    << "rotation.w" << std::endl;
+                // Write data
+                ofs << datetime << ","
                     << transform.header.frame_id << ","
                     << transform.child_frame_id << ","
                     << transform.transform.translation.x << ","
