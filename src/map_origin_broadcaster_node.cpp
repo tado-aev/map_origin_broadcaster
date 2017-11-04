@@ -49,11 +49,11 @@ main(int argc, char* argv[]) {
     std::string base_frame;
     bool save_on_exit;
 
-    nh_p.param("gps_origin_frame", gps_origin_frame, "gps_origin");
-    nh_p.param("gps_base_frame", gps_base_frame, "gps_base_link");
-    nh_p.param("map_frame", map_frame, "map");
-    nh_p.param("odom_frame", odom_frame, "odom");
-    nh_p.param("base_frame", base_frame, "base_link");
+    nh_p.param("gps_origin_frame", gps_origin_frame, std::string{"gps_origin"});
+    nh_p.param("gps_base_frame", gps_base_frame, std::string{"gps_base_link"});
+    nh_p.param("map_frame", map_frame, std::string{"map"});
+    nh_p.param("odom_frame", odom_frame, std::string{"odom"});
+    nh_p.param("base_frame", base_frame, std::string{"base_link"});
     nh_p.param("save_on_exit", save_on_exit, true);
 
     tf2_ros::Buffer buffer;
